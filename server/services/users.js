@@ -1,13 +1,35 @@
 const User = require('../model/userModel');
 
 exports.getUsers = (query) => {
+
     return new Promise((resolve, reject) => {
-        User.find(query, (err, result) => {
-            if(err) {
-                reject(err);
+
+        // let queryCustom = {age: { $gte: 9990}};
+
+        User.aggregate([
+            {
+              '$match': {
+                'age': {
+                  '$gte': 9995
+                }
+              }
+            }, {
+              '$limit': 2
             }
-            resolve(result);
-        });
+          ], (err, result) => {
+                if(err) {
+                    reject(err);
+                }
+                resolve(result);
+            }
+          );
+
+        // User.find(queryCustom, (err, result) => {
+        //     if(err) {
+        //         reject(err);
+        //     }
+        //     resolve(result);
+        // });
     });
 }
 
@@ -43,5 +65,35 @@ exports.updateUser = (user) => {
             }
             resolve();
         })
+    });
+}
+
+exports.saveManyUsers = () =>{
+    
+    return new Promise((resolve, reject) => {
+        
+        let users = createRadomUsers();
+
+        User.insertMany(users, (err) => {
+           
+            if(err) {
+
+                reject(err);
+            }
+
+            resolve();
+        })
+    });
+}
+
+const createRadomUsers = () => {
+
+    return [...Array(100).keys()].map(x => {
+
+        return {
+            user: `User_${x}`,
+            name: `Axity_${x}`,
+            age: x
+        }
     });
 }

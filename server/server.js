@@ -8,7 +8,7 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 
 var app = express();
-mongoose.connect('mongodb://localhost/curso_node', { 
+mongoose.connect('mongodb://192.168.99.100/curso_node', { 
     useNewUrlParser: true 
 });
 
